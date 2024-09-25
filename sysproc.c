@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "proc_info.h"
 
 int
 sys_fork(void)
@@ -88,4 +89,42 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+int
+settickets(int number)
+{
+  if (number <= 0 || number > 100000)
+    return -1;  // invalid number of tickets
+
+  struct proc *curproc = myproc();
+  curproc->tickets = number;
+  
+  return 0;
+}
+
+int
+sys_settickets(void)
+{
+  int number;
+  if (argint(0, &number) < 0)
+    return -1;
+  return settickets(number);
+}
+
+int
+sys_getprocessesinfo(void)
+{
+    struct processes_info *p;
+
+    if (argptr(0, (void*)&p, sizeof(*p)) < 0)
+        return -1;
+
+    return getprocessesinfo(p);
+}
+
+int
+sys_yield(void){
+    yield();
+    return 0;
 }

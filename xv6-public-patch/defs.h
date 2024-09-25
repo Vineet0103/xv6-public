@@ -8,8 +8,8 @@ struct rtcdate;
 struct spinlock;
 struct sleeplock;
 struct stat;
+struct processInfo;
 struct superblock;
-struct processes_info;
 
 // bio.c
 void            binit(void);
@@ -121,10 +121,6 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
-int getprocessesinfo(struct processes_info *);
-
-// rand.c
-unsigned next_random();
 
 // swtch.S
 void            swtch(struct context**, struct context*);
